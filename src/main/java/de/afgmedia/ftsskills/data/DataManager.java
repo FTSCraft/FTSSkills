@@ -92,6 +92,10 @@ public class DataManager {
             ArrayList<Skill> skills = new ArrayList<>();
 
             for (Object o : list) {
+
+                if(plugin.getManager().getSkillByName((String) o) == null)
+                    continue;
+
                 skills.add(plugin.getManager().getSkillByName((String) o));
             }
 
