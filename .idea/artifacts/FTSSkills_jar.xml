@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FTSSkills:jar">
+    <output-path>$USER_HOME$/OneDrive/Desktop/Programmieren/Server/plugins</output-path>
+    <root id="archive" name="FTSSkills.jar">
+      <element id="module-output" name="FTSSkills" />
+    </root>
+  </artifact>
+</component>
