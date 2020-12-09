@@ -26,7 +26,17 @@ public class KillListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    ArrayList<Material> meats = new ArrayList<>(Arrays.asList(Material.BEEF, Material.MUTTON, Material.RABBIT, Material.CHICKEN, Material.PORKCHOP));
+    private ArrayList<Material> meats = new ArrayList<>(Arrays.asList(
+            Material.BEEF,
+            Material.MUTTON,
+            Material.RABBIT,
+            Material.CHICKEN,
+            Material.PORKCHOP,
+            Material.COOKED_BEEF,
+            Material.COOKED_MUTTON,
+            Material.COOKED_RABBIT,
+            Material.COOKED_CHICKEN,
+            Material.COOKED_PORKCHOP));
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
@@ -46,7 +56,7 @@ public class KillListener implements Listener {
             if (!ableToLoot) {
 
                 for (ItemStack drop : event.getDrops()) {
-                    if(!meats.contains(drop.getType())) {
+                    if (!meats.contains(drop.getType())) {
                         event.getDrops().remove(drop);
                     }
                 }
@@ -54,6 +64,16 @@ public class KillListener implements Listener {
 
             }
 
+
+        } else {
+
+            if (!(event.getEntity() instanceof Player)) {
+                for (ItemStack drop : event.getDrops()) {
+                    if (!meats.contains(drop.getType())) {
+                        event.getDrops().remove(drop);
+                    }
+                }
+            }
 
         }
 

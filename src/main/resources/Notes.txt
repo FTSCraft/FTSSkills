@@ -1,1 +1,0 @@
-de.afgmedia.ftsskills.listeners.GuiListener.onClick(GuiListener.java:40)
