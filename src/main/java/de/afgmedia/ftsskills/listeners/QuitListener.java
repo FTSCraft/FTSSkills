@@ -22,6 +22,8 @@ public class QuitListener implements Listener {
 
         plugin.getManager().getDataManager().savePlayerData(user);
 
+        plugin.getManager().removePlayer(event.getPlayer());
+
     }
 
 }

@@ -45,6 +45,10 @@ public class SkillManager {
 
     public boolean checkActivity(Object obj, Player p, Activity activity) {
 
+        if(p.hasPermission("ftsskills.bypass")) {
+            return true;
+        }
+
         //Init skill variable
         Skill skill = null;
 
@@ -117,6 +121,10 @@ public class SkillManager {
 
     public boolean checkIfAbleToCraftBackpack(Player p) {
 
+        if(p.hasPermission("ftsskills.bypass")) {
+            return true;
+        }
+
         //Get User
         SkillUser user = users.get(p);
 
@@ -129,7 +137,48 @@ public class SkillManager {
 
     }
 
+    public boolean checkIfAbleToUseComposter(Player p) {
+
+        if(p.hasPermission("ftsskills.bypass")) {
+            return true;
+        }
+
+        //Get User
+        SkillUser user = users.get(p);
+
+        for (Skill skill : user.getSkills()) {
+            if (skill.isAbleToUseComposter())
+                return true;
+        }
+
+        return false;
+
+    }
+
+
+    public boolean checkIfAbleToMakeHoney(Player p) {
+
+        if(p.hasPermission("ftsskills.bypass")) {
+            return true;
+        }
+
+        //Get User
+        SkillUser user = users.get(p);
+
+        for (Skill skill : user.getSkills()) {
+            if (skill.isAbleToMakeHoney())
+                return true;
+        }
+
+        return false;
+    }
+
+
     public boolean checkIfAbleToCraftPotions(Player p) {
+
+        if(p.hasPermission("ftsskills.bypass")) {
+            return true;
+        }
 
         //Get User
         SkillUser user = users.get(p);
@@ -201,6 +250,10 @@ public class SkillManager {
 
         return skills.get(name);
 
+    }
+
+    public void removePlayer(Player p) {
+        users.remove(p);
     }
 
     public void addCategory(Category category) {

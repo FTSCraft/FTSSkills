@@ -53,7 +53,7 @@ public class FishListener implements Listener {
 
         } else {
 
-            manager.addExperience(p, event.getExpToDrop());
+            manager.addExperience(p, (int) (event.getExpToDrop() * 0.7));
 
         }
 

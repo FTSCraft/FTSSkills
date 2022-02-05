@@ -204,6 +204,9 @@ public class GuiListener implements Listener {
 
         SkillUser user = plugin.getManager().getUser(p);
 
+        if(user == null)
+            return;
+
         if(user.getInventoryType() != null)
             user.setInventoryType(null);
 

@@ -54,12 +54,13 @@ public class KillListener implements Listener {
             boolean ableToLoot = manager.checkActivity(event.getEntity().getType(), p, SkillManager.Activity.MOB_LOOT);
 
             if (!ableToLoot) {
-
+                ArrayList<ItemStack> remove = new ArrayList<>();
                 for (ItemStack drop : event.getDrops()) {
                     if (!meats.contains(drop.getType())) {
-                        event.getDrops().remove(drop);
+                        remove.add(drop);
                     }
                 }
+                event.getDrops().removeAll(remove);
                 p.sendMessage(Values.MESSAGE_NEED_TO_SKILL_MOB_LOOT);
 
             }
@@ -68,11 +69,13 @@ public class KillListener implements Listener {
         } else {
 
             if (!(event.getEntity() instanceof Player)) {
+                ArrayList<ItemStack> remove = new ArrayList<>();
                 for (ItemStack drop : event.getDrops()) {
                     if (!meats.contains(drop.getType())) {
-                        event.getDrops().remove(drop);
+                        remove.add(drop);
                     }
                 }
+                event.getDrops().removeAll(remove);
             }
 
         }

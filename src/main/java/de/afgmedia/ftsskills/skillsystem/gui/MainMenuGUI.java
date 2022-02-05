@@ -105,7 +105,7 @@ public class MainMenuGUI {
                     is = new ItemStack(Material.ORANGE_STAINED_GLASS_PANE);
                     ItemMeta im = is.getItemMeta();
                     im.setDisplayName(Values.ITEM_UNLEARN_SKILL_NAME);
-                    im.setLore(Arrays.asList("§eDu verlierst einen Skill und 5 Level", "§eDafür bekommst du einen neuen Skillpunk!"));
+                    im.setLore(Arrays.asList("§eDu verlierst einen Skill und 500 Taler", "§eDafür bekommst du einen neuen Skillpunk!", "§eFür Reisende kostenlos!"));
                     is.setItemMeta(im);
 
                 }

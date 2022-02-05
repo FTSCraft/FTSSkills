@@ -3,6 +3,7 @@ package de.afgmedia.ftsskills.skillsystem;
 import de.afgmedia.ftsskills.data.Values;
 import de.afgmedia.ftsskills.main.Skills;
 import de.afgmedia.ftsskills.skillsystem.gui.GuiType;
+import net.milkbowl.vault.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -20,6 +21,8 @@ public class SkillUser {
     private ArrayList<Skill> skills = new ArrayList<>();
     private Player player;
     private Skills plugin;
+
+    private boolean recievedFree;
 
     private double experience = 0;
     private int level = 0;
@@ -54,6 +57,12 @@ public class SkillUser {
     }
 
     public void addExperience(int amount) {
+
+        if (level >= Values.MAX_LEVEL) {
+            experience = 0;
+            return;
+        }
+
         //When player gains experience, add it up
         experience = experience + amount;
 
@@ -72,12 +81,16 @@ public class SkillUser {
     //Checks if he got a level up
     public void checkLevelUp(boolean cheat) {
 
+        if (level >= Values.MAX_LEVEL) {
+            return;
+        }
+
         double neededXP = plugin.getManager().getLevelManager().getNeededXPForLevel(level);
 
         boolean lvlUp = false;
 
-        if(neededXP <= experience || cheat) {
-            if(!cheat) {
+        if (neededXP <= experience || cheat) {
+            if (!cheat) {
                 level++;
                 experience = experience - neededXP;
             } else {
@@ -85,7 +98,7 @@ public class SkillUser {
             }
             //If the recent level is higher than his highest, update it
 
-            if(isLevelUp()) {
+            if (isLevelUp()) {
 
                 lvlUp = true;
 
@@ -102,14 +115,14 @@ public class SkillUser {
 
         }
 
-        if(level > highestLevel)
+        if (level > highestLevel)
             highestLevel = level;
 
         bossBar.setVisible(true);
 
         double procents = experience / neededXP;
 
-        if(cheat)
+        if (cheat)
             bossBar.setProgress(0);
         else {
             try {
@@ -119,11 +132,11 @@ public class SkillUser {
             }
         }
 
-        if(!lvlUp)
+        if (!lvlUp)
 
             bossBar.setTitle("Level: " + level);
 
-        if(taskId == -1) {
+        if (taskId == -1) {
 
             taskId = Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 bossBar.setVisible(false);
@@ -148,7 +161,7 @@ public class SkillUser {
 
     private boolean isLevelUp() {
         //If the level isn't equal the highest reached, dont give him a levelup
-        if(level > highestLevel)
+        if (level > highestLevel)
 
             return level % Values.LEVELS_TO_SKILLPOINT == 0;
 
@@ -186,14 +199,14 @@ public class SkillUser {
 
     public void setLevel(int level, boolean startup) {
         this.level = level;
-        if(!startup) {
+        if (!startup) {
             if (level > highestLevel)
                 setHighestLevel(level);
             checkLevelUp(true);
         }
     }
 
-    public void setLevel(int level)  {
+    public void setLevel(int level) {
         setLevel(level, true);
     }
 
@@ -205,11 +218,11 @@ public class SkillUser {
 
         int a = level;
 
-        for(int i = a; i < level + Values.LEVELS_TO_SKILLPOINT; i++) {
+        for (int i = a; i < level + Values.LEVELS_TO_SKILLPOINT; i++) {
 
-            if(i % Values.LEVELS_TO_SKILLPOINT == 0) {
+            if (i % Values.LEVELS_TO_SKILLPOINT == 0) {
 
-                if(level % Values.LEVELS_TO_SKILLPOINT == 0)
+                if (level % Values.LEVELS_TO_SKILLPOINT == 0)
 
                     return i + Values.LEVELS_TO_SKILLPOINT;
 
@@ -225,21 +238,30 @@ public class SkillUser {
 
     public boolean unlearnSkill(Skill skill) {
 
-        if(!skills.contains(skill)) {
+        if (!skills.contains(skill)) {
             return false;
         }
 
-        if(getLevel() < Values.LEVEL_LOST_TO_UNLEARN_SKILL) {
-            return false;
+        if(player.hasPermission("afglock.reisender")) {
+            setSkillPoints(getSkillPoints() + 1);
+
+            skills.remove(skill);
+
+            addExperience(0);
+            return true;
         }
 
-        setLevel(getLevel() - Values.LEVEL_LOST_TO_UNLEARN_SKILL);
+        if(plugin.getEconomy().getBalance(player) < 500) {
+            return false;
+        }
 
         setSkillPoints(getSkillPoints() + 1);
 
         skills.remove(skill);
 
         addExperience(0);
+
+        plugin.getEconomy().withdrawPlayer(player, 500);
 
         return true;
     }
@@ -250,5 +272,13 @@ public class SkillUser {
 
     public void setHighestLevel(int highestLevel) {
         this.highestLevel = highestLevel;
+    }
+
+    public void setRecievedFree(boolean recievedFree) {
+        this.recievedFree = recievedFree;
+    }
+
+    public boolean hasRecievedFree() {
+        return recievedFree;
     }
 }

@@ -7,8 +7,10 @@ import de.afgmedia.ftsskills.listeners.*;
 import de.afgmedia.ftsskills.skillsystem.Skill;
 import de.afgmedia.ftsskills.skillsystem.SkillManager;
 import de.afgmedia.ftsskills.skillsystem.gui.MainMenuGUI;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -20,6 +22,8 @@ public class Skills extends JavaPlugin {
     //Sound.UI_TOAST_CHALLENGE_COMPLETE - LevelUp
 
     private MainMenuGUI mainMenuGUI;
+
+    Economy economy;
 
     @Override
     public void onEnable() {
@@ -51,10 +55,16 @@ public class Skills extends JavaPlugin {
         new ExperienceListener(this);
         new FurnaceExtractListener(this);
         new QuitListener(this);
+        new InteractListener(this);
 
         new CMDftsskills(this);
         new CMDftsskillsadmin(this);
         new CMDinspizieren(this);
+
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
 
     }
 
@@ -66,5 +76,7 @@ public class Skills extends JavaPlugin {
         return mainMenuGUI;
     }
 
-
+    public Economy getEconomy() {
+        return economy;
+    }
 }

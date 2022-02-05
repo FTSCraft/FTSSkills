@@ -59,7 +59,10 @@ public class DataManager {
         cfg.set("skills", skills);
         cfg.set("skillpoints", user.getSkillPoints());
 
+        cfg.set("recievedFree", user.hasRecievedFree());
+
         try {
+
             cfg.save(file);
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,17 +89,65 @@ public class DataManager {
             int level = cfg.getInt("level");
             int skillpoints = cfg.getInt("skillpoints");
             int highestLevel = cfg.getInt("highestLevel");
+            boolean recievedFree = false;
+
+            if(cfg.contains("recievedFree")) {
+                recievedFree = cfg.getBoolean("recievedFree");
+            }
 
             List list = cfg.getList("skills");
 
             ArrayList<Skill> skills = new ArrayList<>();
 
+            int countUnknownSkills = 0;
+
             for (Object o : list) {
 
-                if(plugin.getManager().getSkillByName((String) o) == null)
+                if (plugin.getManager().getSkillByName((String) o) == null) {
+                    countUnknownSkills++;
                     continue;
+                }
 
                 skills.add(plugin.getManager().getSkillByName((String) o));
+            }
+
+            if (level > Values.MAX_LEVEL) {
+                countUnknownSkills = 0;
+                level = Values.MAX_LEVEL;
+                skillpoints = 10;
+                skills.clear();
+                experience = 0;
+                highestLevel = Values.MAX_LEVEL;
+                recievedFree = true;
+
+                player.sendMessage("§l§cWeil du über Level 80 warst, wurden all deine Skills entfernt und du hast statt dessen 10 Skillpunkte erhalten.");
+            }
+
+            if (countUnknownSkills > 0) {
+                player.sendMessage("§cDa du anscheinend einen Skill besaßt, den es nicht mehr gibt, haben wir die Skillpoints gutgeschrieben.");
+                if ((skillpoints + countUnknownSkills + skills.size()) >= 10) {
+                    level = Values.MAX_LEVEL;
+                    skillpoints = 10;
+                    skills.clear();
+                    recievedFree = true;
+                    experience = 0;
+                    highestLevel = Values.MAX_LEVEL;
+                } else skillpoints = skillpoints + countUnknownSkills;
+            }
+
+            if((skillpoints + skills.size() - 2) * 10 > level) {
+                int newSkillpoints = level / 10;
+                skills.clear();
+                newSkillpoints += 2;
+                recievedFree = true;
+
+                skillpoints = newSkillpoints;
+
+                player.sendMessage("§l§cDu hattest ein paaaaaar zu viele Skills für deine Level, es sollte nun angepasst sein! (Du müsstest dir deine Skillpoints noch mal neu verteilen)");
+            }
+
+            if(!recievedFree) {
+                skillpoints = skillpoints + 2;
             }
 
             SkillUser user = new SkillUser(player, plugin);
@@ -106,11 +157,13 @@ public class DataManager {
             user.setSkills(skills);
             user.setSkillPoints(skillpoints);
             user.setHighestLevel(highestLevel);
+            user.setRecievedFree(true);
 
-        } else
-
-            new SkillUser(player, plugin);
-
+        } else {
+            SkillUser user = new SkillUser(player, plugin);
+            user.setRecievedFree(true);
+            user.setSkillPoints(2);
+        }
     }
 
     public void loadCategories() {
@@ -287,6 +340,10 @@ public class DataManager {
                 skill.setBackpacks(true);
             if (skillFile.contains("potions"))
                 skill.setPotions(true);
+            if(skillFile.contains("honey"))
+                skill.setHoney(true);
+            if(skillFile.contains("composter"))
+                skill.setComposter(true);
 
 
             plugin.getManager().addSkill(skill);

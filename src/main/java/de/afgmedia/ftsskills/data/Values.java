@@ -2,7 +2,7 @@ package de.afgmedia.ftsskills.data;
 
 public class Values {
 
-    public static final String LINK = "https://forum.ftscraft.de/t/5364",
+    public static final String LINK = "https://forum.ftscraft.de/skills",
     COMMAND = "/ftsskills",
     PREFIX = "§7[§eFTS-Skills§7] ";
     public static final String MESSAGE_NEED_TO_SKILL = PREFIX + "§7Du musst diese Fähigkeit erst erlernen! Lese mehr darüber hier: §6" + Values.LINK,
@@ -24,5 +24,9 @@ public class Values {
 
     public static final int LEVELS_TO_SKILLPOINT = 10;
     public static final int LEVEL_LOST_TO_UNLEARN_SKILL = 5;
+
+    public static final int MAX_LEVEL = 80;
+    public static final int START_SKILLPOINTS = 2;
+
     public static final boolean DEBUG = false;
 }

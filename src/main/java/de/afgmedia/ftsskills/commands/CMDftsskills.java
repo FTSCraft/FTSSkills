@@ -55,7 +55,7 @@ public class CMDftsskills implements CommandExecutor {
 
                     }
 
-                    p.sendMessage(Values.PREFIX + "Vergiss nicht, wenn du einen Skill verlernen möchtest, verlierst du 5 Level, verlierst den jeweiligen Skill und bekommst dafür einen Skillpunkt!");
+                    p.sendMessage(Values.PREFIX + "Vergiss nicht, wenn du einen Skill verlernen möchtest, verlierst du 500 Taler (bis auf für Reisende), verlierst den jeweiligen Skill und bekommst dafür einen Skillpunkt!");
                 } else {
 
                     String skillName = args[1];
@@ -66,11 +66,11 @@ public class CMDftsskills implements CommandExecutor {
 
                         if(user.unlearnSkill(skill)) {
 
-                            p.sendMessage(Values.PREFIX + "Du hast nun den Skill " + skill.getName() + " §7verlernt und 5 Level geopfert und dafür einen Skillpunkt wiedererlernt!");
+                            p.sendMessage(Values.PREFIX + "Du hast nun den Skill " + skill.getName() + " §7verlernt und 500 Taler ausgegeben und dafür einen Skillpunkt erlangt! (bis auf du bist Reisender, dann hast du nichts ausgegeben)");
 
                         } else {
 
-                            p.sendMessage(Values.PREFIX + "Da ist was schiefgelaufen! Schau nach, ob du " + Values.LEVEL_LOST_TO_UNLEARN_SKILL + " Level hast!");
+                            p.sendMessage(Values.PREFIX + "Da ist was schiefgelaufen! Schau nach, ob du 500 Gold hast!");
 
                         }
 
@@ -88,7 +88,10 @@ public class CMDftsskills implements CommandExecutor {
                     p.sendMessage(Values.PREFIX + "Höchstes Level: §e" + user.getHighestLevel());
                     p.sendMessage(Values.PREFIX + "Wenn dein Level nicht so hoch ist wie dein höchstes, kannst du, bis du es wieder erriecht hast, keine Skillpunkte bekommen!");
                 }
-                p.sendMessage(Values.PREFIX + "XP bis zum nächsten LevelUp: §e" + (plugin.getManager().getLevelManager().getNeededXPForLevel(user.getLevel()) - user.getExperience()));
+                if(user.getLevel() < Values.MAX_LEVEL) {
+                    p.sendMessage(Values.PREFIX + "XP bis zum nächsten LevelUp: §e" + (plugin.getManager().getLevelManager().getNeededXPForLevel(user.getLevel()) - user.getExperience()));
+                } else
+                    p.sendMessage(Values.PREFIX + "XP bis zum nächsten LevelUp: §eMAX");
                 p.sendMessage(Values.PREFIX + "Skillpoints: §e" + user.getSkillPoints());
                 p.sendMessage(Values.PREFIX + "Skills: ");
                 for (Skill skill : user.getSkills()) {

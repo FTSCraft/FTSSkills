@@ -1,7 +1,7 @@
 name: FTSSkills
 main: de.afgmedia.ftsskills.main.Skills
 author: halberfan | AfGMedia
-version: "1.2"
+version: "1.5"
 api-version: "1.15"
 
 commands:
@@ -10,4 +10,6 @@ commands:
       - skill
       - skills
   ftsskillsadmin:
+    permission: ftsskills.admin
   inspizieren:
+    description: "Schaue dir die Skills einer Person in deiner Nähe an"
