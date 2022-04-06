@@ -5,6 +5,7 @@ import de.afgmedia.ftsskills.main.Skills;
 import de.afgmedia.ftsskills.skillsystem.SkillManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,6 +39,12 @@ public class KillListener implements Listener {
             Material.COOKED_CHICKEN,
             Material.COOKED_PORKCHOP));
 
+    private ArrayList<EntityType> entityTypesWhichStillDrop = new ArrayList<>(Arrays.asList(
+            EntityType.ARMOR_STAND,
+            EntityType.CREEPER,
+            EntityType.PLAYER
+    ));
+
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
 
@@ -52,7 +59,6 @@ public class KillListener implements Listener {
                 System.out.println(event.getEntity().getType());
 
             boolean ableToLoot = manager.checkActivity(event.getEntity().getType(), p, SkillManager.Activity.MOB_LOOT);
-
             if (!ableToLoot) {
                 ArrayList<ItemStack> remove = new ArrayList<>();
                 for (ItemStack drop : event.getDrops()) {
@@ -68,7 +74,7 @@ public class KillListener implements Listener {
 
         } else {
 
-            if (!(event.getEntity() instanceof Player)) {
+            if (!entityTypesWhichStillDrop.contains(event.getEntityType())) {
                 ArrayList<ItemStack> remove = new ArrayList<>();
                 for (ItemStack drop : event.getDrops()) {
                     if (!meats.contains(drop.getType())) {

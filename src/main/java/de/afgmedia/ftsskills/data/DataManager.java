@@ -156,7 +156,7 @@ public class DataManager {
             user.setLevel(level);
             user.setSkills(skills);
             user.setSkillPoints(skillpoints);
-            user.setHighestLevel(highestLevel);
+            user.setHighestLevel(level);
             user.setRecievedFree(true);
 
         } else {
