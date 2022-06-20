@@ -30,25 +30,8 @@ public class InteractListener implements Listener {
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 
             boolean onCooldown = cooldown.contains(event.getPlayer());
-            boolean cancelled = false;
 
-            if (event.getClickedBlock().getType().equals(Material.COMPOSTER)) {
-
-                cancelled = !plugin.getManager().checkIfAbleToUseComposter(event.getPlayer());
-
-                event.setCancelled(cancelled);
-
-                if (!onCooldown && cancelled) {
-                    event.getPlayer().sendMessage(Values.PREFIX + "Du brauchst dafür den Skill §cKompostieren");
-                    cooldown.add(event.getPlayer());
-                }
-
-                if(cancelled) {
-                    Levelled levelled = (Levelled) event.getClickedBlock().getBlockData();
-                    levelled.setLevel(0);
-                }
-
-            }
+            boolean cancelled;
 
             if (event.getClickedBlock().getType().equals(Material.BEEHIVE)) {
 
