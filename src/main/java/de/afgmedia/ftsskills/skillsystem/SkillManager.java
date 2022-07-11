@@ -49,6 +49,10 @@ public class SkillManager {
             return true;
         }
 
+        if(obj == Material.APPLE) {
+            return true;
+        }
+
         //Init skill variable
         Skill skill = null;
 
