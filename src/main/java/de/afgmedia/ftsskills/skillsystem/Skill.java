@@ -14,21 +14,21 @@ import java.util.List;
 
 public class Skill {
 
-    private ArrayList<Material> crafting;
-    private ArrayList<Material> forging;
-    private ArrayList<Material> enchanting;
-    private ArrayList<EntityType> mobLoot;
-    private ArrayList<EntityType> breeding;
-    private ArrayList<Material> blockLoot;
-    private ArrayList<Material> fish;
+    private final ArrayList<Material> crafting;
+    private final ArrayList<Material> forging;
+    private final ArrayList<Material> enchanting;
+    private final ArrayList<EntityType> mobLoot;
+    private final ArrayList<EntityType> breeding;
+    private final ArrayList<Material> blockLoot;
+    private final ArrayList<Material> fish;
 
-    private String name;
-    private ArrayList<String> needed;
+    private final String name;
+    private final ArrayList<String> needed;
 
-    private Material material;
-    private String description;
+    private final Material material;
+    private final String description;
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
 
     private boolean backpacks, potions, composter, honey;
 

@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 public class FishListener implements Listener {
 
     private Skills plugin;
-    private SkillManager manager;
+    private final SkillManager manager;
 
     public FishListener(Skills plugin) {
         this.plugin = plugin;
@@ -53,7 +53,7 @@ public class FishListener implements Listener {
 
         } else {
 
-            manager.addExperience(p, (int) (event.getExpToDrop() * 0.7));
+            manager.addExperience(p, (int) (event.getExpToDrop() * 0.5));
 
         }
 
