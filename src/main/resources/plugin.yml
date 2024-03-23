@@ -1,8 +1,8 @@
 name: FTSSkills
 main: de.afgmedia.ftsskills.main.Skills
 author: halberfan | AfGMedia
-version: "1.5"
-api-version: "1.15"
+version: ${project.version}
+api-version: "1.20"
 
 commands:
   ftsskills:
