@@ -344,7 +344,8 @@ public class DataManager {
                 skill.setHoney(true);
             if(skillFile.contains("composter"))
                 skill.setComposter(true);
-
+            if(skillFile.contains("scrolls"))
+                skill.setScrolls(true);
 
             plugin.getManager().addSkill(skill);
 

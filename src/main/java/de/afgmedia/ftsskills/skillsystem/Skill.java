@@ -30,7 +30,7 @@ public class Skill {
 
     private final ItemStack itemStack;
 
-    private boolean backpacks, potions, composter, honey;
+    private boolean backpacks, potions, composter, honey, scrolls;
 
     public Skill(ArrayList<Material> crafting, ArrayList<Material> forging, ArrayList<Material> enchanting, ArrayList<EntityType> mobLoot, ArrayList<EntityType> breeding, ArrayList<Material> blockLoot, ArrayList<Material> fish, String name, Material material, String description, ArrayList<String> needed) {
         this.crafting = crafting;
@@ -115,6 +115,10 @@ public class Skill {
         this.honey = honey;
     }
 
+    public void setScrolls(boolean scrolls) {
+        this.scrolls = scrolls;
+    }
+
     public boolean isAbleToMakeHoney() {
         return honey;
     }
@@ -133,5 +137,9 @@ public class Skill {
 
     public boolean isAbleToCraftPotions() {
         return potions;
+    }
+
+    public boolean isAbleToCraftScrolls() {
+        return scrolls;
     }
 }
