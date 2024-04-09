@@ -43,6 +43,8 @@ public class CraftListener implements Listener {
         String sign = ItemReader.getSign(is);
         if (sign != null && (sign.endsWith("_BACKPACK") || sign.equals("EMPTY_SADDLE"))) {
             ableToCraft = manager.checkIfAbleToCraftBackpack(p);
+        } else if(sign != null && sign.equals("TP_SCROLL")) {
+            ableToCraft = manager.checkIfAbleToCraftScrolls(p);
         }
 
         //Cancel the event if player is not able to craft (invert because if he is able to, it will return true)

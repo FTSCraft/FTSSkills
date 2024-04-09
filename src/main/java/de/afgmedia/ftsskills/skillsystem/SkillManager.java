@@ -141,6 +141,22 @@ public class SkillManager {
 
     }
 
+    public boolean checkIfAbleToCraftScrolls(Player p) {
+        if(p.hasPermission("ftsskills.bypass")) {
+            return true;
+        }
+
+        //Get User
+        SkillUser user = users.get(p);
+
+        for (Skill skill : user.getSkills()) {
+            if (skill.isAbleToCraftScrolls())
+                return true;
+        }
+
+        return false;
+    }
+
     public boolean checkIfAbleToUseComposter(Player p) {
 
         if(p.hasPermission("ftsskills.bypass")) {
