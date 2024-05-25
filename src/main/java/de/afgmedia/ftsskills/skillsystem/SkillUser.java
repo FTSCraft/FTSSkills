@@ -270,7 +270,7 @@ public class SkillUser {
         addExperience(0);
 
         for (String permission : skill.getPermissions()) {
-            plugin.getPermission().playerAdd(player, permission);
+            plugin.getPermission().playerRemove(player, permission);
         }
     }
 
