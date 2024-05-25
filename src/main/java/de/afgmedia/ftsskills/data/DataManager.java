@@ -219,15 +219,16 @@ public class DataManager {
             FileConfiguration skillFile = YamlConfiguration.loadConfiguration(file);
 
             //Get the lists out of the yml
-            List craftingList = skillFile.getList("crafting");
-            List enchantingList = skillFile.getList("enchanting");
-            List forgingList = skillFile.getList("forging");
-            List breedingList = skillFile.getList("breeding");
-            List mobLootList = skillFile.getList("mobLoot");
-            List blockLootList = skillFile.getList("blockLoot");
-            List fishList = skillFile.getList("fishLoot");
+            List<String> craftingList = skillFile.getStringList("crafting");
+            List<String> enchantingList = skillFile.getStringList("enchanting");
+            List<String> forgingList = skillFile.getStringList("forging");
+            List<String> breedingList = skillFile.getStringList("breeding");
+            List<String> mobLootList = skillFile.getStringList("mobLoot");
+            List<String> blockLootList = skillFile.getStringList("blockLoot");
+            List<String> fishList = skillFile.getStringList("fishLoot");
+            List<String> permissions = skillFile.getStringList("permissions");
 
-            List neededList = skillFile.getList("needed");
+            List<String> neededList = skillFile.getStringList("needed");
 
             //Create the lists we're gonna use
             ArrayList<Material> crafting = new ArrayList<Material>();
@@ -237,92 +238,60 @@ public class DataManager {
             ArrayList<EntityType> mobLoot = new ArrayList<>();
             ArrayList<Material> blockLoot = new ArrayList<>();
             ArrayList<Material> fish = new ArrayList<>();
+            List<String> customItems = skillFile.getStringList("customItems");
 
-            ArrayList<String> needed = new ArrayList<String>();
-
-            if (Values.DEBUG)
-                System.out.println(skillFile.getString("name"));
-
-            if (blockLootList != null) {
-                for (Object o : blockLootList) {
-                    String s = (String) o;
-                    Material mat = Material.getMaterial(s);
-                    blockLoot.add(mat);
-                    if (Values.DEBUG)
-                        System.out.println("bll: " + mat);
-                }
+            for (String s : blockLootList) {
+                Material mat = Material.getMaterial(s);
+                blockLoot.add(mat);
+                if (Values.DEBUG)
+                    System.out.println("bll: " + mat);
             }
 
-            if (fishList != null) {
-                for (Object o : fishList) {
-                    String s = (String) o;
-                    Material mat = Material.getMaterial(s);
-                    fish.add(mat);
-                    if (Values.DEBUG)
-                        System.out.println("fish: " + mat);
-                }
+            for (String s : fishList) {
+                Material mat = Material.getMaterial(s);
+                fish.add(mat);
+                if (Values.DEBUG)
+                    System.out.println("fish: " + mat);
             }
 
-            if (mobLootList != null) {
-                for (Object o : mobLootList) {
-                    String s = (String) o;
-                    EntityType type = EntityType.valueOf(s);
-                    mobLoot.add(type);
-                    if (Values.DEBUG)
-                        System.out.println("mob: " + type);
-                }
+            for (String s : mobLootList) {
+                EntityType type = EntityType.valueOf(s);
+                mobLoot.add(type);
+                if (Values.DEBUG)
+                    System.out.println("mob: " + type);
             }
 
-            if (craftingList != null) {
-                for (Object o : craftingList) {
-                    String s = (String) o;
-                    Material m = Material.getMaterial(s);
-                    if (m != null) {
-                        crafting.add(m);
-                    }
-                    if (Values.DEBUG)
-                        System.out.println("craft: " + m);
+            for (String s : craftingList) {
+                Material m = Material.getMaterial(s);
+                if (m != null) {
+                    crafting.add(m);
                 }
+                if (Values.DEBUG)
+                    System.out.println("craft: " + m);
             }
 
-            if (breedingList != null) {
-                for (Object o : breedingList) {
-                    String s = (String) o;
-                    EntityType type = EntityType.valueOf(s);
-                    breeding.add(type);
-                    if (Values.DEBUG)
-                        System.out.println("breed: " + type);
-                }
+            for (String s : breedingList) {
+                EntityType type = EntityType.valueOf(s);
+                breeding.add(type);
+                if (Values.DEBUG)
+                    System.out.println("breed: " + type);
             }
 
 
-            if (enchantingList != null) {
-                for (Object o : enchantingList) {
-                    String s = (String) o;
-                    Material m = Material.getMaterial(s);
-                    if (m != null)
-                        enchanting.add(m);
-                    if (Values.DEBUG)
-                        System.out.println("ench: " + m);
-                }
+            for (String s : enchantingList) {
+                Material m = Material.getMaterial(s);
+                if (m != null)
+                    enchanting.add(m);
+                if (Values.DEBUG)
+                    System.out.println("ench: " + m);
             }
 
-            if (forgingList != null) {
-                for (Object o : forgingList) {
-                    String s = (String) o;
-                    Material m = Material.getMaterial(s);
-                    if (m != null)
-                        forging.add(m);
-                    if (Values.DEBUG)
-                        System.out.println("forge: " + m);
-                }
-            }
-
-            if (neededList != null) {
-                for (Object o : neededList) {
-                    String s = (String) o;
-                    needed.add(s);
-                }
+            for (String s : forgingList) {
+                Material m = Material.getMaterial(s);
+                if (m != null)
+                    forging.add(m);
+                if (Values.DEBUG)
+                    System.out.println("forge: " + m);
             }
 
 
@@ -334,7 +303,7 @@ public class DataManager {
             Material mat = Material.getMaterial(skillFile.getString("material"));
             String lore = skillFile.getString("lore");
 
-            Skill skill = new Skill(crafting, forging, enchanting, mobLoot, breeding, blockLoot, fish, name, mat, lore, needed);
+            Skill skill = new Skill(crafting, forging, enchanting, mobLoot, breeding, blockLoot, fish, customItems, permissions, name, mat, lore, neededList);
 
             if (skillFile.contains("backpack"))
                 skill.setBackpacks(true);

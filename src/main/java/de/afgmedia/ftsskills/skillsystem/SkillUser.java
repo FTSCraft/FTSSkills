@@ -19,8 +19,8 @@ import java.util.ArrayList;
 public class SkillUser {
 
     private ArrayList<Skill> skills = new ArrayList<>();
-    private Player player;
-    private Skills plugin;
+    private final Player player;
+    private final Skills plugin;
 
     private boolean recievedFree;
 
@@ -75,6 +75,10 @@ public class SkillUser {
         skillPoints = skillPoints - 1;
 
         skills.add(skill);
+
+        for (String permission : skill.getPermissions()) {
+            plugin.getPermission().playerAdd(player, permission);
+        }
 
     }
 
@@ -245,9 +249,7 @@ public class SkillUser {
         if(player.hasPermission("afglock.reisender")) {
             setSkillPoints(getSkillPoints() + 1);
 
-            skills.remove(skill);
-
-            addExperience(0);
+            removeSkill(skill);
             return true;
         }
 
@@ -256,14 +258,20 @@ public class SkillUser {
         }
 
         setSkillPoints(getSkillPoints() + 1);
+        removeSkill(skill);
+        plugin.getEconomy().withdrawPlayer(player, 500);
 
+        return true;
+    }
+
+    private void removeSkill(Skill skill) {
         skills.remove(skill);
 
         addExperience(0);
 
-        plugin.getEconomy().withdrawPlayer(player, 500);
-
-        return true;
+        for (String permission : skill.getPermissions()) {
+            plugin.getPermission().playerAdd(player, permission);
+        }
     }
 
     public int getHighestLevel() {

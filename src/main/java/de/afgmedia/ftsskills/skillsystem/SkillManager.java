@@ -14,28 +14,29 @@ public class SkillManager {
 
     private Skills plugin;
 
-    private DataManager dataManager;
-    private LevelManager levelManager;
+    private final DataManager dataManager;
+    private final LevelManager levelManager;
 
     //every skills with name
-    private HashMap<String, Skill> skills = new HashMap<>();
+    private final HashMap<String, Skill> skills = new HashMap<>();
 
     //Every skilluser with player
-    private HashMap<Player, SkillUser> users = new HashMap<>();
+    private final HashMap<Player, SkillUser> users = new HashMap<>();
 
     //Every Categoryname with Category
-    private HashMap<String, Category> categories = new HashMap<>();
+    private final HashMap<String, Category> categories = new HashMap<>();
 
-    private HashMap<Category, CategoryGUI> categoryGuis = new HashMap<>();
+    private final HashMap<Category, CategoryGUI> categoryGuis = new HashMap<>();
 
     //For which item do I need for which skill at crafting, forging, enchanting
-    private HashMap<Material, Skill> crafting = new HashMap<>();
-    private HashMap<Material, Skill> forging = new HashMap<>();
-    private HashMap<Material, Skill> enchanting = new HashMap<>();
-    private HashMap<EntityType, Skill> mobLoot = new HashMap<>();
-    private HashMap<EntityType, Skill> breeding = new HashMap<>();
-    private HashMap<Material, Skill> blockLoot = new HashMap<>();
-    private HashMap<Material, Skill> fish = new HashMap<>();
+    private final HashMap<Material, Skill> crafting = new HashMap<>();
+    private final HashMap<Material, Skill> forging = new HashMap<>();
+    private final HashMap<Material, Skill> enchanting = new HashMap<>();
+    private final HashMap<EntityType, Skill> mobLoot = new HashMap<>();
+    private final HashMap<EntityType, Skill> breeding = new HashMap<>();
+    private final HashMap<Material, Skill> blockLoot = new HashMap<>();
+    private final HashMap<Material, Skill> fish = new HashMap<>();
+    private final HashMap<String, Skill> customItems = new HashMap<>();
 
     public SkillManager(Skills plugin) {
         this.plugin = plugin;
@@ -45,11 +46,11 @@ public class SkillManager {
 
     public boolean checkActivity(Object obj, Player p, Activity activity) {
 
-        if(p.hasPermission("ftsskills.bypass")) {
+        if (p.hasPermission("ftsskills.bypass")) {
             return true;
         }
 
-        if(obj == Material.APPLE) {
+        if (obj == Material.APPLE) {
             return true;
         }
 
@@ -62,51 +63,35 @@ public class SkillManager {
         //get the right hashmap for the activity + skill
 
         //If the object is a material, check the skills who use materials
-        if (obj instanceof Material) {
+        if (obj instanceof Material mat) {
 
-            Material mat = (Material) obj;
+            skill = switch (activity) {
+                case CRAFTING -> crafting.get(mat);
+                case FORGING -> forging.get(mat);
+                case ENCHANTING -> enchanting.get(mat);
+                case BLOCK_LOOT -> blockLoot.get(mat);
+                case FISH -> fish.get(mat);
+                default -> skill;
+            };
 
-            switch (activity) {
-                case CRAFTING:
-                    skill = crafting.get(mat);
-                    break;
-                case FORGING:
-                    skill = forging.get(mat);
-                    break;
-                case ENCHANTING:
-                    skill = enchanting.get(mat);
-                    break;
-                case BLOCK_LOOT:
-                    skill = blockLoot.get(mat);
-                    break;
-                case FISH:
-                    skill = fish.get(mat);
-                    break;
-            }
-
-        } else if (obj instanceof EntityType) {
+        } else if (obj instanceof EntityType type) {
 
             if (Values.DEBUG)
                 System.out.println("entity");
-
-            EntityType type = (EntityType) obj;
 
             if (Values.DEBUG)
                 for (EntityType entityType : mobLoot.keySet()) {
                     System.out.println(entityType.toString() + " " + mobLoot.get(entityType).getName());
                 }
 
-            switch (activity) {
+            skill = switch (activity) {
+                case MOB_LOOT -> mobLoot.get(type);
+                case BREED -> breeding.get(type);
+                default -> skill;
+            };
 
-                case MOB_LOOT:
-                    skill = mobLoot.get(type);
-                    break;
-                case BREED:
-                    skill = breeding.get(type);
-                    break;
-
-            }
-
+        } else if (obj instanceof String sign) {
+            skill = customItems.get(sign);
         }
 
         //If the skill dosen't exist, it means everyone is able to craft it so it will return a true
@@ -123,62 +108,10 @@ public class SkillManager {
 
     }
 
-    public boolean checkIfAbleToCraftBackpack(Player p) {
-
-        if(p.hasPermission("ftsskills.bypass")) {
-            return true;
-        }
-
-        //Get User
-        SkillUser user = users.get(p);
-
-        for (Skill skill : user.getSkills()) {
-            if (skill.isAbleToCraftBackpacks())
-                return true;
-        }
-
-        return false;
-
-    }
-
-    public boolean checkIfAbleToCraftScrolls(Player p) {
-        if(p.hasPermission("ftsskills.bypass")) {
-            return true;
-        }
-
-        //Get User
-        SkillUser user = users.get(p);
-
-        for (Skill skill : user.getSkills()) {
-            if (skill.isAbleToCraftScrolls())
-                return true;
-        }
-
-        return false;
-    }
-
-    public boolean checkIfAbleToUseComposter(Player p) {
-
-        if(p.hasPermission("ftsskills.bypass")) {
-            return true;
-        }
-
-        //Get User
-        SkillUser user = users.get(p);
-
-        for (Skill skill : user.getSkills()) {
-            if (skill.isAbleToUseComposter())
-                return true;
-        }
-
-        return false;
-
-    }
-
 
     public boolean checkIfAbleToMakeHoney(Player p) {
 
-        if(p.hasPermission("ftsskills.bypass")) {
+        if (p.hasPermission("ftsskills.bypass")) {
             return true;
         }
 
@@ -196,7 +129,7 @@ public class SkillManager {
 
     public boolean checkIfAbleToCraftPotions(Player p) {
 
-        if(p.hasPermission("ftsskills.bypass")) {
+        if (p.hasPermission("ftsskills.bypass")) {
             return true;
         }
 
@@ -246,6 +179,10 @@ public class SkillManager {
             breeding.put(type, skill);
         }
 
+        for (String customItem : skill.getCustomItems()) {
+            customItems.put(customItem, skill);
+        }
+
     }
 
     public void addUser(SkillUser skillUser) {
@@ -293,7 +230,7 @@ public class SkillManager {
 
     public enum Activity {
 
-        CRAFTING, FORGING, ENCHANTING, BLOCK_LOOT, MOB_LOOT, BREED, FISH, BACKPACK, POTIONS
+        CRAFTING, FORGING, ENCHANTING, BLOCK_LOOT, MOB_LOOT, BREED, FISH, BACKPACK, POTIONS, CUSTOM_CRAFT
 
     }
 

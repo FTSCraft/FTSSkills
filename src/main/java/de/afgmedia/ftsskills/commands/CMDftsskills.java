@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public class CMDftsskills implements CommandExecutor {
 
-    private Skills plugin;
+    private final Skills plugin;
 
     public CMDftsskills(Skills plugin) {
         this.plugin = plugin;
@@ -103,15 +103,6 @@ public class CMDftsskills implements CommandExecutor {
             return true;
 
         }
-
-        if(p == null)
-            System.out.println("p == null");
-        if(plugin == null)
-            System.out.println("pl == null");
-        if(plugin.getMainMenuGUI() == null)
-            System.out.println("maingui == null");
-        if(plugin.getMainMenuGUI().getInventory() == null)
-            System.out.println("inv == null");
 
         p.openInventory(plugin.getMainMenuGUI().getInventory());
 

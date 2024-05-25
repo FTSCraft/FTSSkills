@@ -8,6 +8,7 @@ import de.afgmedia.ftsskills.skillsystem.Skill;
 import de.afgmedia.ftsskills.skillsystem.SkillManager;
 import de.afgmedia.ftsskills.skillsystem.gui.MainMenuGUI;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -24,6 +25,7 @@ public class Skills extends JavaPlugin {
     private MainMenuGUI mainMenuGUI;
 
     Economy economy;
+    Permission permission;
 
     @Override
     public void onEnable() {
@@ -61,9 +63,13 @@ public class Skills extends JavaPlugin {
         new CMDftsskillsadmin(this);
         new CMDinspizieren(this);
 
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
+        }
+        if (permissionProvider != null) {
+            permission = permissionProvider.getProvider();
         }
 
     }
@@ -78,5 +84,9 @@ public class Skills extends JavaPlugin {
 
     public Economy getEconomy() {
         return economy;
+    }
+
+    public Permission getPermission() {
+        return permission;
     }
 }

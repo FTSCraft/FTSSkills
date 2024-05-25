@@ -36,27 +36,26 @@ public class CraftListener implements Listener {
         Material mat = is.getType();
 
         //Checks if player is able to craft
-        boolean ableToCraft = manager.checkActivity(mat, p, SkillManager.Activity.CRAFTING);
+        boolean ableToCraft;
 
         //check if it got a custom name
 
         String sign = ItemReader.getSign(is);
-        if (sign != null && (sign.endsWith("_BACKPACK") || sign.equals("EMPTY_SADDLE"))) {
-            ableToCraft = manager.checkIfAbleToCraftBackpack(p);
-        } else if(sign != null && sign.equals("TP_SCROLL")) {
-            ableToCraft = manager.checkIfAbleToCraftScrolls(p);
+        if (sign != null) {
+            ableToCraft = manager.checkActivity(sign, p, SkillManager.Activity.CUSTOM_CRAFT);
+        } else {
+            ableToCraft = manager.checkActivity(mat, p, SkillManager.Activity.CRAFTING);
         }
 
         //Cancel the event if player is not able to craft (invert because if he is able to, it will return true)
         event.setCancelled(!ableToCraft);
 
         //If player isnt able to do it, send player a message
-        if(!ableToCraft) {
+        if (!ableToCraft) {
             p.sendMessage(Values.MESSAGE_NEED_TO_SKILL);
         }
 
     }
-
 
 
 }

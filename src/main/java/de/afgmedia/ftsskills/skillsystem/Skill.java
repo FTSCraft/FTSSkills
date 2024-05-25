@@ -14,16 +14,18 @@ import java.util.List;
 
 public class Skill {
 
-    private final ArrayList<Material> crafting;
-    private final ArrayList<Material> forging;
-    private final ArrayList<Material> enchanting;
-    private final ArrayList<EntityType> mobLoot;
-    private final ArrayList<EntityType> breeding;
-    private final ArrayList<Material> blockLoot;
-    private final ArrayList<Material> fish;
+    private final List<Material> crafting;
+    private final List<Material> forging;
+    private final List<Material> enchanting;
+    private final List<EntityType> mobLoot;
+    private final List<EntityType> breeding;
+    private final List<Material> blockLoot;
+    private final List<Material> fish;
+    private final List<String> customItems;
+    private final List<String> permissions;
 
     private final String name;
-    private final ArrayList<String> needed;
+    private final List<String> needed;
 
     private final Material material;
     private final String description;
@@ -32,7 +34,7 @@ public class Skill {
 
     private boolean backpacks, potions, composter, honey, scrolls;
 
-    public Skill(ArrayList<Material> crafting, ArrayList<Material> forging, ArrayList<Material> enchanting, ArrayList<EntityType> mobLoot, ArrayList<EntityType> breeding, ArrayList<Material> blockLoot, ArrayList<Material> fish, String name, Material material, String description, ArrayList<String> needed) {
+    public Skill(List<Material> crafting, List<Material> forging, List<Material> enchanting, List<EntityType> mobLoot, List<EntityType> breeding, List<Material> blockLoot, List<Material> fish, List<String> customItems, List<String> permissions, String name, Material material, String description, List<String> needed) {
         this.crafting = crafting;
         this.forging = forging;
         this.enchanting = enchanting;
@@ -40,6 +42,8 @@ public class Skill {
         this.breeding = breeding;
         this.blockLoot = blockLoot;
         this.fish = fish;
+        this.customItems = customItems;
+        this.permissions = permissions;
         this.name = ChatColor.translateAlternateColorCodes('&', name);
         this.material = material;
         this.description = description;
@@ -67,31 +71,35 @@ public class Skill {
         return itemStack;
     }
 
-    public ArrayList<Material> getCrafting() {
+    public List<Material> getCrafting() {
         return crafting;
     }
 
-    public ArrayList<Material> getForging() {
+    public List<Material> getForging() {
         return forging;
     }
 
-    public ArrayList<Material> getEnchanting() {
+    public List<Material> getEnchanting() {
         return enchanting;
     }
 
-    public ArrayList<EntityType> getMobLoot() {
+    public List<EntityType> getMobLoot() {
         return mobLoot;
     }
 
-    public ArrayList<EntityType> getBreeding() {
+    public List<EntityType> getBreeding() {
         return breeding;
     }
 
-    public ArrayList<Material> getBlockLoot() {
+    public List<Material> getBlockLoot() {
         return blockLoot;
     }
 
-    public ArrayList<Material> getFish() {
+    public List<String> getCustomItems() {
+        return customItems;
+    }
+
+    public List<Material> getFish() {
         return fish;
     }
 
@@ -99,7 +107,7 @@ public class Skill {
         return name;
     }
 
-    public ArrayList<String> getNeeded() {
+    public List<String> getNeeded() {
         return needed;
     }
 
@@ -141,5 +149,9 @@ public class Skill {
 
     public boolean isAbleToCraftScrolls() {
         return scrolls;
+    }
+
+    public List<String> getPermissions() {
+        return permissions;
     }
 }

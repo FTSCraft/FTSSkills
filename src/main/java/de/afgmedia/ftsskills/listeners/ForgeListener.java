@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.SmithItemEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 
@@ -31,10 +32,10 @@ public class ForgeListener implements Listener {
         Inventory inventory = event.getInventory();
 
         //Check if Inventory is an instance of an AnvilInventory
-        if(inventory instanceof AnvilInventory) {
+        if (inventory instanceof AnvilInventory) {
 
             //Get the Material
-            if(event.getCurrentItem() == null)
+            if (event.getCurrentItem() == null)
                 return;
             Material mat = event.getCurrentItem().getType();
             //Get the player
@@ -45,12 +46,29 @@ public class ForgeListener implements Listener {
             event.setCancelled(!ableToForge);
 
             //If player isnt able to do it, send player a message
-            if(!ableToForge) {
+            if (!ableToForge) {
 
                 p.sendMessage(Values.MESSAGE_NEED_TO_SKILL);
 
             }
 
+        }
+
+    }
+
+    @EventHandler
+    public void onSmithing(SmithItemEvent event) {
+
+        Player p = (Player) event.getWhoClicked();
+
+        if (event.getCurrentItem() == null)
+            return;
+
+        boolean ableToSmith = manager.checkActivity(event.getCurrentItem().getType(), p, SkillManager.Activity.CRAFTING);
+
+        if (!ableToSmith) {
+            p.sendMessage(Values.MESSAGE_NEED_TO_SKILL);
+            event.setCancelled(true);
         }
 
     }
