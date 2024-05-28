@@ -3,6 +3,10 @@ package de.afgmedia.ftsskills.skillsystem;
 import de.afgmedia.ftsskills.data.Values;
 import de.afgmedia.ftsskills.main.Skills;
 import de.afgmedia.ftsskills.skillsystem.gui.GuiType;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.Node;
 import net.milkbowl.vault.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -68,18 +72,6 @@ public class SkillUser {
 
         //Checks if player got a level up
         checkLevelUp();
-    }
-
-    public void addSkill(Skill skill) {
-
-        skillPoints = skillPoints - 1;
-
-        skills.add(skill);
-
-        for (String permission : skill.getPermissions()) {
-            plugin.getPermission().playerAdd(player, permission);
-        }
-
     }
 
     //Checks if he got a level up
@@ -240,6 +232,22 @@ public class SkillUser {
 
     }
 
+    public void addSkill(Skill skill) {
+
+        skillPoints = skillPoints - 1;
+
+        skills.add(skill);
+
+        for (String permission : skill.getPermissions()) {
+            User user = plugin.getPermission().getUserManager().getUser(player.getUniqueId());
+            if (user != null) {
+                user.data().add(Node.builder((permission)).build());
+                plugin.getPermission().getUserManager().saveUser(user);
+            } else throw new NullPointerException("User " + player.getName() + " wasn't found by luckperms");
+        }
+
+    }
+
     public boolean unlearnSkill(Skill skill) {
 
         if (!skills.contains(skill)) {
@@ -270,7 +278,11 @@ public class SkillUser {
         addExperience(0);
 
         for (String permission : skill.getPermissions()) {
-            plugin.getPermission().playerRemove(player, permission);
+            User user = plugin.getPermission().getUserManager().getUser(player.getUniqueId());
+            if (user != null) {
+                user.data().remove(Node.builder((permission)).build());
+                plugin.getPermission().getUserManager().saveUser(user);
+            } else throw new NullPointerException("User " + player.getName() + " wasn't found by luckperms");
         }
     }
 

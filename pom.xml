@@ -6,7 +6,7 @@
 
     <groupId>de.afgmedia.ftsskills</groupId>
     <artifactId>FTSSkills</artifactId>
-    <version>2.0</version>
+    <version>2.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,6 +65,12 @@
             <groupId>com.github.halberfan</groupId>
             <artifactId>FTSUtils</artifactId>
             <version>4d9dadd865</version>
+        </dependency>
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.4</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

@@ -7,6 +7,8 @@ import de.afgmedia.ftsskills.listeners.*;
 import de.afgmedia.ftsskills.skillsystem.Skill;
 import de.afgmedia.ftsskills.skillsystem.SkillManager;
 import de.afgmedia.ftsskills.skillsystem.gui.MainMenuGUI;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Material;
@@ -25,7 +27,7 @@ public class Skills extends JavaPlugin {
     private MainMenuGUI mainMenuGUI;
 
     Economy economy;
-    Permission permission;
+    LuckPerms luckPerms;
 
     @Override
     public void onEnable() {
@@ -64,13 +66,10 @@ public class Skills extends JavaPlugin {
         new CMDinspizieren(this);
 
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
-        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
         }
-        if (permissionProvider != null) {
-            permission = permissionProvider.getProvider();
-        }
+        luckPerms = LuckPermsProvider.get();
 
     }
 
@@ -86,7 +85,7 @@ public class Skills extends JavaPlugin {
         return economy;
     }
 
-    public Permission getPermission() {
-        return permission;
+    public LuckPerms getPermission() {
+        return luckPerms;
     }
 }
