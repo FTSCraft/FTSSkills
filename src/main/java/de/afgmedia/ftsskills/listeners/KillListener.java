@@ -42,7 +42,11 @@ public class KillListener implements Listener {
     private ArrayList<EntityType> entityTypesWhichStillDrop = new ArrayList<>(Arrays.asList(
             EntityType.ARMOR_STAND,
             EntityType.CREEPER,
-            EntityType.PLAYER
+            EntityType.PLAYER,
+            EntityType.HORSE,
+            EntityType.ZOMBIE_HORSE,
+            EntityType.SKELETON_HORSE,
+            EntityType.DONKEY
     ));
 
     @EventHandler
