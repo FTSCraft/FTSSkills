@@ -95,20 +95,21 @@ public class DataManager {
                 recievedFree = cfg.getBoolean("recievedFree");
             }
 
-            List list = cfg.getList("skills");
+            List<String> list = cfg.getStringList("skills");
 
             ArrayList<Skill> skills = new ArrayList<>();
 
             int countUnknownSkills = 0;
 
-            for (Object o : list) {
+            for (String skillName : list) {
 
-                if (plugin.getManager().getSkillByName((String) o) == null) {
+                Skill skill = plugin.getManager().getSkillByName(skillName);
+                if (skill == null) {
                     countUnknownSkills++;
                     continue;
                 }
 
-                skills.add(plugin.getManager().getSkillByName((String) o));
+                skills.add(skill);
             }
 
             if (level > Values.MAX_LEVEL) {

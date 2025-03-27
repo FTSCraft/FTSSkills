@@ -56,7 +56,6 @@ public class Skills extends JavaPlugin {
         new KillListener(this);
         new JoinListener(this);
         new GuiListener(this);
-        new ExperienceListener(this);
         new FurnaceExtractListener(this);
         new QuitListener(this);
         new InteractListener(this);
