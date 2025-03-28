@@ -1,6 +1,8 @@
 package de.afgmedia.ftsskills.skillsystem;
 
 import de.afgmedia.ftsskills.data.Values;
+import de.afgmedia.ftsskills.listeners.events.SkillLearnEvent;
+import de.afgmedia.ftsskills.listeners.events.SkillUnlearnEvent;
 import de.afgmedia.ftsskills.main.Skills;
 import de.afgmedia.ftsskills.skillsystem.gui.GuiType;
 import net.luckperms.api.LuckPerms;
@@ -237,6 +239,7 @@ public class SkillUser {
         skillPoints = skillPoints - 1;
 
         skills.add(skill);
+        new SkillLearnEvent(this, skill).callEvent();
 
         for (String permission : skill.getPermissions()) {
             User user = plugin.getPermission().getUserManager().getUser(player.getUniqueId());
@@ -254,7 +257,7 @@ public class SkillUser {
             return false;
         }
 
-        if(player.hasPermission("afglock.reisender")) {
+        if(player.hasPermission("group.reisender")) {
             setSkillPoints(getSkillPoints() + 1);
 
             removeSkill(skill);
@@ -274,6 +277,7 @@ public class SkillUser {
 
     private void removeSkill(Skill skill) {
         skills.remove(skill);
+        new SkillUnlearnEvent(this, skill).callEvent();
 
         addExperience(0);
 
