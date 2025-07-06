@@ -33,7 +33,7 @@ public class InteractListener implements Listener {
 
             boolean cancelled;
 
-            if (event.getClickedBlock().getType().equals(Material.BEEHIVE)) {
+            if (event.getClickedBlock().getType().equals(Material.BEEHIVE) || event.getClickedBlock().getType().equals(Material.BEE_NEST)) {
 
                 cancelled = !plugin.getManager().checkIfAbleToMakeHoney(event.getPlayer());
 
