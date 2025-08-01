@@ -7,10 +7,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.SmithItemEvent;
 import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class ForgeListener implements Listener {
 
@@ -23,35 +23,49 @@ public class ForgeListener implements Listener {
         this.manager = plugin.getManager();
     }
 
-
-    //Because there is no anvil event which we can use, we will use the click event and check if its a anvilinventory
+    // Use PrepareAnvilEvent instead of InventoryClickEvent
     @EventHandler
-    public void onForge(InventoryClickEvent event) {
+    public void onForge(PrepareAnvilEvent event) {
 
-        //Get Inventory
-        Inventory inventory = event.getInventory();
+        // Get Inventory
+        AnvilInventory anvilInv = event.getInventory();
 
-        //Check if Inventory is an instance of an AnvilInventory
-        if (inventory instanceof AnvilInventory) {
+        // Get the first item
+        ItemStack firstItem = anvilInv.getItem(0);
+        if (firstItem == null)
+            return;
 
-            //Get the Material
-            if (event.getCurrentItem() == null)
-                return;
-            Material mat = event.getCurrentItem().getType();
-            //Get the player
-            Player p = (Player) event.getWhoClicked();
+        if (firstItem.getType().isAir())
+            return;
 
-            boolean ableToForge = manager.checkActivity(mat, p, SkillManager.Activity.FORGING);
+        // Get the result
+        ItemStack result = event.getResult();
+        if (result == null)
+            return;
 
-            event.setCancelled(!ableToForge);
+        if (result.getType().isAir())
+            return;
 
-            //If player isnt able to do it, send player a message
-            if (!ableToForge) {
+        // Check if there's a player viewing
+        if (event.getViewers().isEmpty())
+            return;
 
-                p.sendMessage(Values.MESSAGE_NEED_TO_SKILL);
+        // Get the player
+        Player p = (Player) event.getViewers().get(0);
 
-            }
+        // Check the second item
+        ItemStack secondItem = anvilInv.getItem(1);
+        boolean isEnchantingBook = secondItem != null && secondItem.getType() == Material.ENCHANTED_BOOK;
 
+        // Check if the player can perform the activity
+        boolean ableToForge = isEnchantingBook
+                ? manager.checkActivity(result.getType(), p, SkillManager.Activity.ENCHANTING)
+                : manager.checkActivity(result.getType(), p, SkillManager.Activity.FORGING);
+
+        // If player can't forge, remove the result and send message
+        if (!ableToForge) {
+            event.setResult(null);
+            p.sendMessage(Values.MESSAGE_NEED_TO_SKILL);
         }
 
     }
