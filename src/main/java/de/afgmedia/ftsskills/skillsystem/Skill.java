@@ -7,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,14 +50,20 @@ public class Skill {
         this.description = description;
         this.needed = needed;
 
+        itemStack = generateItem(material, description);
+    }
+
+    private @NotNull ItemStack generateItem(Material material, String description) {
+        final ItemStack itemStack;
         itemStack = new ItemStack(material, 1);
         ItemMeta meta = itemStack.getItemMeta();
-        meta.addEnchant(Enchantment.DURABILITY, 1, true);
+        meta.addEnchant(Enchantment.UNBREAKING, 1, true);
         meta.setDisplayName(this.name);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.setLore(Arrays.asList(description.split("&nn")));
         itemStack.setItemMeta(meta);
+        return itemStack;
     }
 
     public String getDescription() {
