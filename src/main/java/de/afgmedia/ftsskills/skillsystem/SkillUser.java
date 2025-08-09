@@ -257,20 +257,20 @@ public class SkillUser {
             return false;
         }
 
-        if(player.hasPermission("group.reisender")) {
+        if(player.hasPermission("ftspest.bypass")) {
             setSkillPoints(getSkillPoints() + 1);
 
             removeSkill(skill);
             return true;
         }
 
-        if(plugin.getEconomy().getBalance(player) < 500) {
+        if(plugin.getEconomy().getBalance(player) < Values.SKILL_UNLEARN_COST) {
             return false;
         }
 
         setSkillPoints(getSkillPoints() + 1);
         removeSkill(skill);
-        plugin.getEconomy().withdrawPlayer(player, 500);
+        plugin.getEconomy().withdrawPlayer(player, Values.SKILL_UNLEARN_COST);
 
         return true;
     }

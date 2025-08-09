@@ -29,4 +29,6 @@ public class Values {
     public static final int START_SKILLPOINTS = 2;
 
     public static final boolean DEBUG = false;
+
+    public static final int SKILL_UNLEARN_COST = 1000;
 }
